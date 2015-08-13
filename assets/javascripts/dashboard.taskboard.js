@@ -1,5 +1,17 @@
 (function($) {
 
+	/* =====================================================
+	** String API
+	*/
+
+	if (typeof String.prototype.startsWith != 'function') {
+	  String.prototype.startsWith = function (str){
+	    return this.slice(0, str.length) == str;
+	  };
+	}
+
+	// Setup
+
 	$.fn.rdbColumn = function() {
 		return $(this).rdbFindUp('[data-rdb-column-id]');
 	};
@@ -58,7 +70,12 @@
 					accept: function(draggable) {
 						var issue = draggable.rdbIssue();
 						var dropon = issue.data('rdb-drop-on') || '';
-						return issue.data('rdb-drop-group') == cgroup && dropon.indexOf(coluid) >= 0;
+						var dropgroup = issue.data('rdb-drop-group');
+						// FIXME: Refactor below for constant in outside
+						if(cgroup.startsWith('assigne_'))
+							return dropon.indexOf(coluid) >= 0 || issue.data('rdb-drop-group') != cgroup;
+						else
+							return issue.data('rdb-drop-group') == cgroup && dropon.indexOf(coluid) >= 0;
 					}, //'[data-rdb-drop-on*="' + accept + '"]',
 					activeClass: "rdb-column-drop-active",
 					hoverClass: "rdb-column-drop-hover",
@@ -69,11 +86,16 @@
 						var issueId = issue.rdbIssueId();
 						var groupId = issue.rdbGroupId();
 
-						if(issueId && issue.rdbColumnId() != coluid) {
+						// FIXME: Refactor below as constants; along with slice parameter
+						var assignTarget = 'same';
+						if(cgroup.startsWith('assigne_'))
+							assignTarget = cgroup.slice(8);
+
+						if(issueId && (issue.rdbColumnId() != coluid || issue.data('rdb-drop-group') != cgroup)) {
 							currentIssue = issue;
 							currentIssue.css({ visibility: 'hidden', opacity: 0 });
 							$.getScript(
-								baseURL + '/move?issue=' + issueId + '&lock_version=' + lock + '&column=' + coluid + '&group=' + groupId)
+								baseURL + '/move?issue=' + issueId + '&lock_version=' + lock + '&column=' + coluid + '&group=' + groupId + '&assigne=' + assignTarget)
 							.fail(function(jqxhr, settings, exception) {
 								$().rdbDADShowIssue();
 								$().rdbError('<b>Ajax Error</b>: ' + exception);
