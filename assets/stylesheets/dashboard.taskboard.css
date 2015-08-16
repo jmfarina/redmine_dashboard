@@ -6,6 +6,10 @@
  * Taskboard Header
  */
 
+.rdb-column.ui-droppable {
+	height: 150px;
+}
+
 .rdb-columns, .rdb-headers {
 	margin: 0;
 	padding: 0;
