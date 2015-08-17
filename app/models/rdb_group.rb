@@ -39,7 +39,7 @@ class RdbGroup
     @visible ||= catch(:visible) do
       board.columns.values.each do |column|
         next if not column.visible? or column.compact?
-        throw :visible, true if filter(column.issues).count >= 0
+        throw :visible, true if !board.options[:hide_empty_groups] || filter(column.issues).count > 0
       end
       false
     end

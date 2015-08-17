@@ -27,6 +27,10 @@ class RdbTaskboard < RdbDashboard
       options[:hide_columns] ||= []
       options[:hide_columns].include?(id) ? options[:hide_columns].delete(id) : (options[:hide_columns] << id)
     end
+
+    if params[:hide_empty_groups]
+      options[:hide_empty_groups] = (params[:hide_empty_groups] == 'true')
+    end
   end
 
   def build

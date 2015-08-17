@@ -21,6 +21,8 @@ ru:
   rdb_options_change_assignee_info: "Назначать задачу текущему пользователю при перемещении"
   rdb_options_hide_done: "Скрыть закрытые задачи"
   rdb_options_hide_done_info: "Скрыть закрытые задачи и сделать колонку 'Выполнено' меньше"
+  rdb_options_hide_empty_groups: "Скрыть пустые группы"
+  rdb_options_hide_empty_groups_info: "Скрыть группы без задач"
   rdb_options_reset: "Очистить фильтр"
   rdb_options_reset_info: "Сбросить все фильтры по-умолчанию"
   rdb_options_configure: "Настроить"

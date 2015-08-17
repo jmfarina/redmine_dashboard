@@ -21,6 +21,8 @@ es:
   rdb_options_change_assignee_info: Cambiar asignación al usuario actual cuando la tarea se mueva
   rdb_options_hide_done: Ocultar tareas cerradas
   rdb_options_hide_done_info: Oculta tareas cerradas y disminuye la columna "hecho"
+  rdb_options_hide_empty_groups: Ocultar grupos vacíos
+  rdb_options_hide_empty_groups_info: Oculta los grupos que no contienen tareas.
   rdb_options_reset: Restablecer filtro
   rdb_options_reset_info: Restablecer todos los filtros
   rdb_options_configure: Configurar

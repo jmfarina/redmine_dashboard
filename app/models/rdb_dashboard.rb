@@ -167,7 +167,8 @@ class RdbDashboard
         assignee: check_opts(config, 'assignee', :me, :all),
         version: check_opts(config, 'version', :latest, :all),
         hide_done: check_opts(config, 'hide_done', false, true),
-        change_assignee: check_opts(config, 'change_assignee', false, true)
+        change_assignee: check_opts(config, 'change_assignee', false, true),
+        hide_empty_groups: check_opts(config, 'hide_empty_groups', false, true)
       }
     end
 

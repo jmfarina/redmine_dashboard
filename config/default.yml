@@ -28,3 +28,7 @@ hide_done: false
 # Should "Change assignee" option be enabled by default
 # Allowed values are: `false` or `true`
 change_assignee: false
+
+# Should empty groups should be hidden by default
+# Allowed values are: `false` or `true`
+hide_empty_groups: false

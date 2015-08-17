@@ -21,6 +21,8 @@ pt-BR:
   rdb_options_change_assignee_info: Mudar atribuição para o usuário atual quando a tarefa for alterada
   rdb_options_hide_done: Esconder tarefas fechadas
   rdb_options_hide_done_info: Esconder tarefas fechadas e diminuir a coluna "feito"
+  rdb_options_hide_empty_groups: Esconder grupos vazios
+  rdb_options_hide_empty_groups_info: Esconder grupos que não contem tarefas
   rdb_options_reset: Resetar filtro
   rdb_options_reset_info: Resetar todos filtros para o padrão
   rdb_options_configure: Configurar

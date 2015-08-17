@@ -24,6 +24,8 @@ en:
   rdb_options_change_assignee_info: Change assignee to current user when issue is moved.
   rdb_options_hide_done: Hide closed issues
   rdb_options_hide_done_info: Hide closed issues and makes done column smaller.
+  rdb_options_hide_empty_groups: Hide empty groups
+  rdb_options_hide_empty_groups_info: Hide groups with no issues.
   rdb_options_reset: Reset filter
   rdb_options_reset_info: Reset all filters back to default
   rdb_options_configure: Configure

@@ -51,6 +51,8 @@
             :enabled => @board.options[:change_assignee], :title => t(:rdb_options_change_assignee_info)
         = rdb_checkbox_link_to t(:rdb_options_hide_done), rdb_board_path(:hide_done => !@board.options[:hide_done]),
             :enabled => @board.options[:hide_done], :title => t(:rdb_options_hide_done_info)
+        = rdb_checkbox_link_to t(:rdb_options_hide_empty_groups), rdb_board_path(:hide_empty_groups => !@board.options[:hide_empty_groups]),
+            :enabled => @board.options[:hide_empty_groups], :title => t(:rdb_options_hide_empty_groups_info)
         = rdb_checkbox_link_to t(:rdb_options_include_subprojects), rdb_board_path(:include_subprojects => (@board.project_ids.size > 1) ? 'false' : 'true'),
             :enabled => (@board.project_ids.size > 1)
     - render_rdb_menu_list @board.column_list, :title => t(:rdb_options_columns) do |column|
