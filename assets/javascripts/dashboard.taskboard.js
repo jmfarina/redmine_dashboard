@@ -72,9 +72,7 @@
 						var dropon = issue.data('rdb-drop-on') || '';
 						var dropgroup = issue.data('rdb-drop-group');
 						// FIXME: Refactor below for constant in outside
-						if(cgroup.startsWith('assigne_'))
-							return dropon.indexOf(coluid) >= 0 || issue.data('rdb-drop-group') != cgroup;
-						if(cgroup.startsWith('version-'))
+						if(cgroup.startsWith('assigne_') || cgroup.startsWith('version-'))
 							return dropon.indexOf(coluid) >= 0 || issue.data('rdb-drop-group') != cgroup;
 						else
 							return issue.data('rdb-drop-group') == cgroup && dropon.indexOf(coluid) >= 0;
