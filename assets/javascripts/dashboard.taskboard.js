@@ -90,12 +90,17 @@
 						var assignTarget = 'same';
 						if(cgroup.startsWith('assigne_'))
 							assignTarget = cgroup.slice(8);
+						
+						if(cgroup.startsWith('version-')) {
+							assignVersion = cgroup.slice(8);
+							versionParam = "&version=" + assignVersion;
+						}
 
 						if(issueId && (issue.rdbColumnId() != coluid || issue.data('rdb-drop-group') != cgroup)) {
 							currentIssue = issue;
 							currentIssue.css({ visibility: 'hidden', opacity: 0 });
 							$.getScript(
-								baseURL + '/move?issue=' + issueId + '&lock_version=' + lock + '&column=' + coluid + '&group=' + groupId + '&assigne=' + assignTarget)
+								baseURL + '/move?issue=' + issueId + '&lock_version=' + lock + '&column=' + coluid + '&group=' + groupId + '&assigne=' + assignTarget + versionParam)
 							.fail(function(jqxhr, settings, exception) {
 								$().rdbDADShowIssue();
 								$().rdbError('<b>Ajax Error</b>: ' + exception);

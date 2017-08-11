@@ -58,6 +58,41 @@ class RdbTaskboardController < RdbDashboardController
           :issue => @issue.subject, :source => @issue.status.name, :target => @status.name
       end
     end
+    
+    if params[:version]
+      
+      # validate that version was found
+#      begin
+        version = Version.find params[:version].to_i
+#        rescue ActiveRecord::RecordNotFound
+#          show_error "#{l(:error_version_not_found)} #{params[:version]}" -> refer to recurring_tasks_controller.rb show_error
+#      end
+        
+      # validate that version is open
+#      unless version.open?
+#        set proper error
+#        return flash_error :rdb_flash_illegal_workflow_action,
+#          :issue => @issue.subject, :source => @issue.status.name, :target => column.title  
+#      end
+      
+      # validate that version belongs to project
+#      unless version.project.id == @issue.project.id # or @project.id ? should be the same
+#        set proper error
+#        return flash_error :rdb_flash_illegal_workflow_action,
+#          :issue => @issue.subject, :source => @issue.status.name, :target => column.title
+#      end
+        
+#      validate that user can update version
+#      if @issue.new_statuses_allowed_to(User.current).include?(status) or User.current.admin?
+#        @issue.status         = status
+#        @issue.assigned_to_id = User.current.id if @board.options[:change_assignee]
+#      else
+#        return flash_error :rdb_flash_illegal_workflow_action,
+#          :issue => @issue.subject, :source => @issue.status.name, :target => @status.name
+#      end
+      
+      @issue.version = version
+    end
 
     @issue.save
 
