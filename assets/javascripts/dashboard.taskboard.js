@@ -74,6 +74,8 @@
 						// FIXME: Refactor below for constant in outside
 						if(cgroup.startsWith('assigne_'))
 							return dropon.indexOf(coluid) >= 0 || issue.data('rdb-drop-group') != cgroup;
+						if(cgroup.startsWith('version-'))
+							return dropon.indexOf(coluid) >= 0 || issue.data('rdb-drop-group') != cgroup;
 						else
 							return issue.data('rdb-drop-group') == cgroup && dropon.indexOf(coluid) >= 0;
 					}, //'[data-rdb-drop-on*="' + accept + '"]',
