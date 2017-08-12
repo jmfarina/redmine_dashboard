@@ -91,6 +91,7 @@
 						if(cgroup.startsWith('assigne_'))
 							assignTarget = cgroup.slice(8);
 						
+						var versionParam = "";
 						if(cgroup.startsWith('version-')) {
 							assignVersion = cgroup.slice(8);
 							versionParam = "&version=" + assignVersion;
