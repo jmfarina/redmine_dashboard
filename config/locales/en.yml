@@ -60,6 +60,9 @@ en:
   rdb_x_issues:
     one: 1 Issue
     other: "%{count} Issues"
+  rdb_x_hours:
+    one: 1 Hour
+    other: "%{count} Hours"
 
   rdb_dialog_update_issue_title: Update Issue
   rdb_dialog_update_issue_status: Choose new issue status

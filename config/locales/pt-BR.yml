@@ -54,6 +54,9 @@ pt-BR:
   rdb_x_issues:
     one: 1 Tarefa
     other: "%[count] Tarefas"
+  rdb_x_hours:
+    one: 1 Hora
+    other: "%{count} Horas"
   rdb_dialog_update_issue_title: Atualizar Tarefa
   rdb_dialog_update_issue_status: Escolher status da tarefa
   rdb_other_issues: Outras tarefas <span>(%{count})</span>

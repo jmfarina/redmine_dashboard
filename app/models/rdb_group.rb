@@ -8,6 +8,8 @@ class RdbGroup
 
     @options = default_options
     @options[:accept] = options[:accept] if options[:accept].respond_to? :call
+    @options[:spent_hours] = options[:spent_hours].blank? ? "-" : options[:spent_hours].to_s
+    @options[:estimated_hours] = options[:estimated_hours].blank? ? "-" : options[:estimated_hours].to_s
   end
 
   def default_options
@@ -47,5 +49,13 @@ class RdbGroup
 
   def issue_count
     filter(@board.issues).count.to_i
+  end
+
+  def estimated_hours
+    @options[:estimated_hours]
+  end
+  
+  def spent_hours
+    @options[:spent_hours]
   end
 end

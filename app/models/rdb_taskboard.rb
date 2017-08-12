@@ -69,7 +69,7 @@ class RdbTaskboard < RdbDashboard
       self.add_group RdbGroup.new(:category_none, :rdb_unassigned, :accept => Proc.new {|issue| issue.category.nil? })
     when :version
       versions.each do |version|
-        self.add_group RdbGroup.new("version-#{version.id}", version.name, :accept => Proc.new {|issue| issue.fixed_version_id == version.id })
+        self.add_group RdbGroup.new("version-#{version.id}", version.name, {:accept => Proc.new {|issue| issue.fixed_version_id == version.id}, :spent_hours => version.spent_hours, :estimated_hours => version.estimated_hours})
       end
       self.add_group RdbGroup.new(:version_none, :rdb_unassigned, :accept => Proc.new {|issue| issue.fixed_version.nil? })
     when :project

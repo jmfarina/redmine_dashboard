@@ -52,6 +52,9 @@ fr:
   rdb_x_issues:
     one: 1 demande
     other: "%{count} demandes"
+  rdb_x_hours:
+    one: 1 Heure
+    other: "%{count} Heures"
   rdb_dialog_update_issue_title: Mettre à jour la demande
   rdb_dialog_update_issue_status: Choisir le statut des nouvelles demandes
   rdb_other_issues: Autres demandes <span>(%{count})</span>
