@@ -2,9 +2,16 @@ class RdbGroup
   attr_accessor :board
   attr_reader :name, :options, :id
 
-  def initialize(id, name, options = {})
+  # @param id group's id
+  # @param name the group's name
+  # @param groupType the type of the object associated to this group
+  # @param objectId the id of the object associated to this group
+  # @param a hash with other options
+  def initialize(id, name, groupType = nil, objectId = nil, options = {})
     @id    = id.to_s
     @name  = name
+    @groupType = groupType
+    @objectId = objectId
 
     @options = default_options
     @options[:accept] = options[:accept] if options[:accept].respond_to? :call
@@ -52,10 +59,20 @@ class RdbGroup
   end
 
   def estimated_hours
-    @options[:estimated_hours]
+    estimated_hours = "-"
+    case @groupType
+    when "Version"
+      estimated_hours = @board.versions.find(@objectId).estimated_hours.to_s unless @objectId.blank?
+    end
+    return estimated_hours
   end
   
   def spent_hours
-    @options[:spent_hours]
+    spent_hours = "-"
+    case @groupType
+    when "Version"
+      estimated_hours = @board.versions.find(@objectId).spent_hours.to_s unless @objectId.blank?
+    end
+    return spent_hours
   end
 end

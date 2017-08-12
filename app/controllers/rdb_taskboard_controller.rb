@@ -74,7 +74,7 @@ class RdbTaskboardController < RdbDashboardController
 #          show_error "#{l(:error_version_not_found)} #{params[:version]}" -> refer to recurring_tasks_controller.rb show_error
 #      end
       
-      if @issue.assignable_versions.include?(version) 
+      if @issue.assignable_versions.include?(version)
         @issue.fixed_version = version
       end
     end

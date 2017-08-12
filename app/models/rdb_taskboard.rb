@@ -49,38 +49,38 @@ class RdbTaskboard < RdbDashboard
     case options[:group]
     when :tracker
       trackers.each do |tracker|
-        self.add_group RdbGroup.new("tracker-#{tracker.id}", tracker.name, :accept => Proc.new {|issue| issue.tracker == tracker })
+        self.add_group RdbGroup.new("tracker-#{tracker.id}", tracker.name, Tracker, tracker.id, :accept => Proc.new {|issue| issue.tracker == tracker })
       end
     when :priority
       IssuePriority.find(:all).reverse.each do |p|
-        self.add_group RdbGroup.new("priority-#{p.position}", p.name, :accept => Proc.new {|issue| issue.priority_id == p.id })
+        self.add_group RdbGroup.new("priority-#{p.position}", p.name, IssuePriority, p.id, :accept => Proc.new {|issue| issue.priority_id == p.id })
       end
     when :assignee
-      self.add_group RdbGroup.new(:assigne_me, :rdb_filter_assignee_me, :accept => Proc.new {|issue| issue.assigned_to_id == User.current.id })
-      self.add_group RdbGroup.new(:assigne_none, :rdb_filter_assignee_none, :accept => Proc.new {|issue| issue.assigned_to_id.nil? })
+      self.add_group RdbGroup.new(:assigne_me, :rdb_filter_assignee_me, User, User.current.id, :accept => Proc.new {|issue| issue.assigned_to_id == User.current.id })
+      self.add_group RdbGroup.new(:assigne_none, :rdb_filter_assignee_none, User, nil, :accept => Proc.new {|issue| issue.assigned_to_id.nil? })
       assignees.sort_by(&:name).each do |principal|
         next if principal.id == User.current.id
-        self.add_group RdbGroup.new("assigne_#{principal.id}", principal.name, :accept => Proc.new {|issue| !issue.assigned_to_id.nil? and issue.assigned_to_id == principal.id })
+        self.add_group RdbGroup.new("assigne_#{principal.id}", principal.name, User, principal.id, :accept => Proc.new {|issue| !issue.assigned_to_id.nil? and issue.assigned_to_id == principal.id })
       end
     when :category
       issue_categories.each do |category|
-        self.add_group RdbGroup.new("category-#{category.id}", category.name, :accept => Proc.new {|issue| issue.category_id == category.id })
+        self.add_group RdbGroup.new("category-#{category.id}", category.name, IssueCategory, category.id, :accept => Proc.new {|issue| issue.category_id == category.id })
       end
-      self.add_group RdbGroup.new(:category_none, :rdb_unassigned, :accept => Proc.new {|issue| issue.category.nil? })
+      self.add_group RdbGroup.new(:category_none, :rdb_unassigned, IssueCategory, nil, :accept => Proc.new {|issue| issue.category.nil? })
     when :version
       versions.each do |version|
-        self.add_group RdbGroup.new("version-#{version.id}", version.name, {:accept => Proc.new {|issue| issue.fixed_version_id == version.id}, :spent_hours => version.spent_hours, :estimated_hours => version.estimated_hours})
+        self.add_group RdbGroup.new("version-#{version.id}", version.name, "Version", version.id, {:accept => Proc.new {|issue| issue.fixed_version_id == version.id}})
       end
-      self.add_group RdbGroup.new(:version_none, :rdb_unassigned, :accept => Proc.new {|issue| issue.fixed_version.nil? })
+      self.add_group RdbGroup.new(:version_none, :rdb_unassigned, "Version", nil, :accept => Proc.new {|issue| issue.fixed_version.nil? })
     when :project
       projects.each do |project|
-        self.add_group RdbGroup.new("project-#{project.id}", project.name, :accept => Proc.new {|issue| issue.project_id == project.id })
+        self.add_group RdbGroup.new("project-#{project.id}", project.name, Project, project.id, :accept => Proc.new {|issue| issue.project_id == project.id })
       end
     when :parent
       issues.where(id: issues.pluck(:parent_id).uniq).uniq.all.each do |issue|
-        self.add_group RdbGroup.new("issue-#{issue.id}", issue.subject, :accept => Proc.new { |sub_issue| sub_issue.parent_id == issue.id })
+        self.add_group RdbGroup.new("issue-#{issue.id}", issue.subject, Issue, issue.id, :accept => Proc.new { |sub_issue| sub_issue.parent_id == issue.id })
       end
-      self.add_group RdbGroup.new("issue-others", :rdb_no_parent, :accept => Proc.new { |issue| issue.parent.nil? and issue.children.empty? })
+      self.add_group RdbGroup.new("issue-others", :rdb_no_parent, Issue, nil, :accept => Proc.new { |issue| issue.parent.nil? and issue.children.empty? })
     end
 
     self.add_group RdbGroup.new(:all, :rdb_all_issues) if groups.empty?
