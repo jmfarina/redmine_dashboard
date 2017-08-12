@@ -1,10 +1,19 @@
 class RdbGroup
   attr_accessor :board
   attr_reader :name, :options, :id
+  
+  # group type constants
+  PARENT_ISSUE = 1
+  VERSION = 2
+  ASSIGNEE = 3
+  PROJECT = 4
+  ISSUE_CATEGORY = 5
+  PRIORITY = 6
+  TRACKER = 7
 
   # @param id group's id
   # @param name the group's name
-  # @param groupType the type of the object associated to this group
+  # @param groupType the type of the group, according to group types' constants
   # @param objectId the id of the object associated to this group
   # @param a hash with other options
   def initialize(id, name, groupType = nil, objectId = nil, options = {})
@@ -12,7 +21,7 @@ class RdbGroup
     @name  = name
     @groupType = groupType
     @objectId = objectId
-
+    
     @options = default_options
     @options[:accept] = options[:accept] if options[:accept].respond_to? :call
     @options[:spent_hours] = options[:spent_hours].blank? ? "-" : options[:spent_hours].to_s
@@ -61,8 +70,12 @@ class RdbGroup
   def estimated_hours
     estimated_hours = "-"
     case @groupType
-    when "Version"
+    when PARENT_ISSUE
+      estimated_hours = @board.issues.find(@objectId).total_estimated_hours.to_s unless @objectId.blank?
+      # TODO calculate time for all issues without parent task
+    when VERSION
       estimated_hours = @board.versions.find(@objectId).estimated_hours.to_s unless @objectId.blank?
+      # TODO calculate time for all issues not assigned to a version
     end
     return estimated_hours
   end
@@ -70,8 +83,12 @@ class RdbGroup
   def spent_hours
     spent_hours = "-"
     case @groupType
-    when "Version"
-      estimated_hours = @board.versions.find(@objectId).spent_hours.to_s unless @objectId.blank?
+    when PARENT_ISSUE
+      spent_hours = @board.issues.find(@objectId).total_spent_hours.to_s unless @objectId.blank?
+      # TODO calculate time for all issues without parent task
+    when VERSION
+      spent_hours = @board.versions.find(@objectId).spent_hours.to_s unless @objectId.blank?
+      # TODO calculate time for all issues not assigned to a version
     end
     return spent_hours
   end
