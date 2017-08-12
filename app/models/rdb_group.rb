@@ -74,8 +74,14 @@ class RdbGroup
       estimated_hours = @board.issues.find(@objectId).total_estimated_hours.to_s unless @objectId.blank?
       # TODO calculate time for all issues without parent task
     when VERSION
-      estimated_hours = @board.versions.find(@objectId).estimated_hours.to_s unless @objectId.blank?
-      # TODO calculate time for all issues not assigned to a version
+      estimated_hours = 0
+      if @objectId.blank?
+       @board.issues.where(:fixed_version => nil).each do |issue|
+          estimated_hours += issue.estimated_hours unless issue.estimated_hours.blank?
+        end
+      else
+        estimated_hours = @board.versions.find(@objectId).estimated_hours.to_s
+      end
     when ASSIGNEE
       unless @objectId.blank?
         estimated_hours = 0
@@ -95,8 +101,14 @@ class RdbGroup
       spent_hours = @board.issues.find(@objectId).total_spent_hours.to_s unless @objectId.blank?
       # TODO calculate time for all issues without parent task
     when VERSION
-      spent_hours = @board.versions.find(@objectId).spent_hours.to_s unless @objectId.blank?
-      # TODO calculate time for all issues not assigned to a version
+      spent_hours = 0
+      if @objectId.blank?
+        @board.issues.where(:fixed_version => nil).each do |issue|
+          spent_hours += issue.spent_hours unless issue.spent_hours.blank?
+        end
+      else
+        spent_hours = @board.versions.find(@objectId).spent_hours.to_s
+      end
     when ASSIGNEE
       unless @objectId.blank?
         spent_hours = 0
