@@ -76,6 +76,14 @@ class RdbGroup
     when VERSION
       estimated_hours = @board.versions.find(@objectId).estimated_hours.to_s unless @objectId.blank?
       # TODO calculate time for all issues not assigned to a version
+    when ASSIGNEE
+      unless @objectId.blank?
+        estimated_hours = 0
+        @board.issues.where(:assigned_to_id => @objectId).each do |issue|
+          estimated_hours += issue.estimated_hours unless issue.estimated_hours.blank?
+        end
+      end
+      # TODO calculate time for all unassigned issues
     end
     return estimated_hours
   end
@@ -89,6 +97,14 @@ class RdbGroup
     when VERSION
       spent_hours = @board.versions.find(@objectId).spent_hours.to_s unless @objectId.blank?
       # TODO calculate time for all issues not assigned to a version
+    when ASSIGNEE
+      unless @objectId.blank?
+        spent_hours = 0
+        @board.issues.where(:assigned_to_id => @objectId).each do |issue|
+          spent_hours += issue.spent_hours unless issue.spent_hours.blank?
+        end
+      end
+      # TODO calculate time for all unassigned issues
     end
     return spent_hours
   end
