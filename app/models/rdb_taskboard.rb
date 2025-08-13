@@ -28,6 +28,10 @@ class RdbTaskboard < RdbDashboard
       options[:hide_columns] ||= []
       options[:hide_columns].include?(id) ? options[:hide_columns].delete(id) : (options[:hide_columns] << id)
     end
+
+    if params[:hide_empty_groups]
+      options[:hide_empty_groups] = (params[:hide_empty_groups] == 'true')
+    end
   end
 
   def statuses
@@ -84,6 +88,8 @@ class RdbTaskboard < RdbDashboard
           add_group RdbGroup.new(
             "tracker-#{tracker.id}",
             tracker.name,
+          RdbGroup::TRACKER,
+          tracker.id,
             accept: proc {|issue| issue.tracker == tracker },
           )
         end
@@ -93,6 +99,8 @@ class RdbTaskboard < RdbDashboard
           add_group RdbGroup.new(
             "priority-#{p.position}",
             p.name,
+            RdbGroup::PRIORITY,
+            p.id,
             accept: proc {|issue| issue.priority_id == p.id },
           )
         end
@@ -101,11 +109,15 @@ class RdbTaskboard < RdbDashboard
         add_group RdbGroup.new(
           :assigne_me,
           :rdb_filter_assignee_me,
+          RdbGroup::ASSIGNEE,
+          User.current.id,
           accept: proc {|issue| issue.assigned_to_id == User.current.id },
         )
         add_group RdbGroup.new(
           :assigne_none,
           :rdb_filter_assignee_none,
+          RdbGroup::ASSIGNEE,
+          nil,
           accept: proc {|issue| issue.assigned_to_id.nil? },
         )
         assignees.sort_by(&:name).each do |principal|
@@ -114,6 +126,8 @@ class RdbTaskboard < RdbDashboard
           add_group RdbGroup.new(
             "assignee-#{id}",
             principal.name,
+            RdbGroup::ASSIGNEE,
+            principal.id,
             accept: proc {|issue| !issue.assigned_to_id.nil? && issue.assigned_to_id == principal.id },
           )
         end
@@ -123,12 +137,16 @@ class RdbTaskboard < RdbDashboard
           add_group RdbGroup.new(
             "category-#{category.id}",
             category.name,
+            RdbGroup::ISSUE_CATEGORY,
+            category.id,
             accept: proc {|issue| issue.category_id == category.id },
           )
         end
         add_group RdbGroup.new(
           :category_none,
           :rdb_unassigned,
+          RdbGroup::ISSUE_CATEGORY,
+          nil,
           accept: proc {|issue| issue.category.nil? },
         )
 
@@ -137,12 +155,16 @@ class RdbTaskboard < RdbDashboard
           add_group RdbGroup.new(
             "version-#{version.id}",
             version.name,
+            RdbGroup::VERSION,
+            version.id,
             accept: proc {|issue| issue.fixed_version_id == version.id },
           )
         end
         add_group RdbGroup.new(
           :version_none,
           :rdb_unassigned,
+          RdbGroup::VERSION,
+          nil,
           accept: proc {|issue| issue.fixed_version.nil? },
         )
 
@@ -151,6 +173,8 @@ class RdbTaskboard < RdbDashboard
           add_group RdbGroup.new(
             "project-#{project.id}",
             project.name,
+            RdbGroup::PROJECT,
+            project.id,
             accept: proc {|issue| issue.project_id == project.id },
           )
         end
@@ -160,12 +184,16 @@ class RdbTaskboard < RdbDashboard
           add_group RdbGroup.new(
             "issue-#{issue.id}",
             issue.subject,
+            RdbGroup::PARENT_ISSUE,
+            issue.id,
             accept: proc {|sub_issue| sub_issue.parent_id == issue.id },
           )
         end
         add_group RdbGroup.new(
           'issue-others',
           :rdb_no_parent,
+          RdbGroup::PARENT_ISSUE,
+          nil,
           accept: proc {|issue| issue.parent.nil? },
         )
     end

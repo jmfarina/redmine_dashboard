@@ -15,7 +15,7 @@ class RdbTaskboardController < RdbDashboardController
 
     if @statuses.empty?
       return flash_error :rdb_flash_illegal_workflow_action,
-        issue: @issue.subject, source: @issue.status.name, target: column.title
+                         issue: @issue.subject, source: @issue.status.name, target: column.title
     end
 
     # Show dialog if more than one status are available
@@ -31,15 +31,28 @@ class RdbTaskboardController < RdbDashboardController
     @issue.done_ratio = params[:done_ratio].to_i if params[:done_ratio]
     @issue.assigned_to_id = nil if params[:unassigne_me] && @issue.assigned_to_id == User.current.id
     @issue.assigned_to_id = User.current.id if params[:assigne_me]
+    @issue.assigned_to_id = User.current.id if params[:assigne] #&& TODO validate permissions and that user is valid for issue/project
 
     if params[:status]
       status = IssueStatus.find params[:status].to_i
       if @issue.new_statuses_allowed_to(User.current).include?(status)
-        @issue.status         = status
+        @issue.status = status
         @issue.assigned_to_id = User.current.id if @board.options[:change_assignee]
       else
         return flash_error :rdb_flash_illegal_workflow_action,
-          issue: @issue.subject, source: @issue.status.name, target: @status.name
+                           issue: @issue.subject, source: @issue.status.name, target: @status.name
+      end
+    end
+
+    if params[:version]
+      begin
+        version = Version.find params[:version].to_i
+      rescue ActiveRecord::RecordNotFound
+        show_error "#{l(:error_version_not_found)} #{params[:version]}" # TODO check error - > refer to recurring_tasks_controller.rb show_error
+      end
+
+      if @issue.assignable_versions.include?(version) # TODO validate that user can change version?
+        @issue.fixed_version = version
       end
     end
 
