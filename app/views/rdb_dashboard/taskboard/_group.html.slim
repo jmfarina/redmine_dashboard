@@ -3,4 +3,6 @@
     a.rdb-evt-group-toggle
       h4 = group.title
       span = t(:rdb_x_issues, count: group.issue_count)
+      span = t(:label_spent_time, count: group.spent_hours)
+      span = t(:field_estimated_hours, count: group.estimated_hours)
   = render partial: 'rdb_dashboard/taskboard/columns', locals: {group: group}

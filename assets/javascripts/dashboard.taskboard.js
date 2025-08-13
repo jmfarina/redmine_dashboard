@@ -58,7 +58,10 @@
 					accept: function(draggable) {
 						var issue = draggable.rdbIssue();
 						var dropon = issue.data('rdb-drop-on') || '';
-						return issue.data('rdb-drop-group') == cgroup && dropon.indexOf(coluid) >= 0;
+            if(cgroup.startsWith('assigne_') || cgroup.startsWith('version-'))
+              return dropon.indexOf(coluid) >= 0 || issue.data('rdb-drop-group') != cgroup;
+            else
+						  return issue.data('rdb-drop-group') == cgroup && dropon.indexOf(coluid) >= 0;
 					}, //'[data-rdb-drop-on*="' + accept + '"]',
 					activeClass: "rdb-column-drop-active",
 					hoverClass: "rdb-column-drop-hover",
@@ -69,11 +72,22 @@
 						var issueId = issue.rdbIssueId();
 						var groupId = issue.rdbGroupId();
 
+            // FIXME: Refactor below as constants; along with slice parameter
+            var assignTarget = 'same';
+            if(cgroup.startsWith('assigne_'))
+              assignTarget = cgroup.slice(8);
+
+            var versionParam = "";
+            if(cgroup.startsWith('version-')) {
+              assignVersion = cgroup.slice(8);
+              versionParam = "&version=" + assignVersion;
+            }
+
 						if(issueId && issue.rdbColumnId() != coluid) {
 							currentIssue = issue;
 							currentIssue.css({ visibility: 'hidden', opacity: 0 });
 							$.getScript(
-								baseURL + '/move?issue=' + issueId + '&lock_version=' + lock + '&column=' + coluid + '&group=' + groupId)
+                baseURL + '/move?issue=' + issueId + '&lock_version=' + lock + '&column=' + coluid + '&group=' + groupId + '&assigne=' + assignTarget + versionParam)
 							.fail(function(jqxhr, settings, exception) {
 								Rdb.rdbDADShowIssue();
 								Rdb.rdbError('<b>Error</b>: ' + exception);
