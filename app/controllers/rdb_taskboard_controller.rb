@@ -46,12 +46,12 @@ class RdbTaskboardController < RdbDashboardController
 
     if params[:version]
       begin
-        version = Version.find params[:version].to_i
+        version = params[:version].empty? ? nil : (Version.find params[:version].to_i)
       rescue ActiveRecord::RecordNotFound
         show_error "#{l(:error_version_not_found)} #{params[:version]}" # TODO check error - > refer to recurring_tasks_controller.rb show_error
       end
 
-      if @issue.assignable_versions.include?(version) # TODO validate that user can change version?
+      if @issue.assignable_versions.include?(version) || version.nil? # TODO validate that user can change version?
         @issue.fixed_version = version
       end
     end
