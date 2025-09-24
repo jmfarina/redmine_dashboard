@@ -58,7 +58,7 @@
 					accept: function(draggable) {
 						var issue = draggable.rdbIssue();
 						var dropon = issue.data('rdb-drop-on') || '';
-            if(cgroup.startsWith('assigne_') || cgroup.startsWith('version-'))
+            if(cgroup.startsWith('assigne_') || cgroup.startsWith('version-') || cgroup.startsWith('version_'))
               return dropon.indexOf(coluid) >= 0 || issue.data('rdb-drop-group') != cgroup;
             else
 						  return issue.data('rdb-drop-group') == cgroup && dropon.indexOf(coluid) >= 0;
@@ -81,6 +81,9 @@
             if(cgroup.startsWith('version-')) {
               assignVersion = cgroup.slice(8);
               versionParam = "&version=" + assignVersion;
+            } else if (cgroup.startsWith('version_')) {
+              // the "unassigned" groups use underscore instead of hyphen in their ids
+              versionParam = "&version=";//no version, we want to unassign it
             }
 
             // if either the issue's column or group (row) is being changed, execute the update
