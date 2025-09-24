@@ -83,7 +83,8 @@
               versionParam = "&version=" + assignVersion;
             }
 
-						if(issueId && issue.rdbColumnId() != coluid) {
+            // if either the issue's column or group (row) is being changed, execute the update
+						if(issueId && (issue.rdbColumnId() !== coluid || groupId !== cgroup)) {
 							currentIssue = issue;
 							currentIssue.css({ visibility: 'hidden', opacity: 0 });
 							$.getScript(
