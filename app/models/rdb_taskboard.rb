@@ -124,7 +124,7 @@ class RdbTaskboard < RdbDashboard
           next if principal.id == User.current.id
 
           add_group RdbGroup.new(
-            "assignee-#{id}",
+            "assignee-#{principal.id}",
             principal.name,
             RdbGroup::ASSIGNEE,
             principal.id,
