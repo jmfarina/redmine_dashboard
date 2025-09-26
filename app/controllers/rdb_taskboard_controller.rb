@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class RdbTaskboardController < RdbDashboardController
+
+  ASSIGNE_NONE = "none"
+  ASSIGNE_ME = "me"
+
   menu_item :dashboard
 
   def board_type
@@ -32,18 +36,17 @@ class RdbTaskboardController < RdbDashboardController
 
     if params[:unassigne_me] && @issue.assigned_to_id == User.current.id
       @issue.assigned_to_id = nil
-    elsif params[:assigne] && !params[:assigne].empty?
+    elsif params[:assignee] && !params[:assignee].empty?
       # if we receive an int, try to recover a user by id
-      if !Integer(params[:assigne].to_s, exception: false).nil?
+      if !Integer(params[:assignee].to_s, exception: false).nil?
         begin
-          new_user = (User.find params[:assigne].to_i)
+          new_user = (User.find params[:assignee].to_i)
         rescue ActiveRecord::RecordNotFound
-          puts "User not found! #{params[:assigne].to_i}"
           return flash_error :rdb_flash_invalid_request
         end
-      elsif params[:assigne] == "none"
+      elsif params[:assignee] == ASSIGNE_NONE
         new_user = nil
-      elsif params[:assigne] == "me"
+      elsif params[:assignee] == ASSIGNE_ME
         new_user = User.current
       else
         return flash_error :rdb_flash_invalid_request

@@ -30,6 +30,11 @@ class RdbDashboard
   end
 
   def update(params)
+    # don't update filters if keep_filters param is set to true
+    if params[:keep_filters] && params[:keep_filters] == "true"
+      return
+    end
+
     if params[:reset]
       filters.each_value do |filter|
         filter.values = filter.default_values
@@ -71,7 +76,7 @@ class RdbDashboard
         version_ids += project.rolled_up_versions.pluck(:id)
       end
 
-      Version.where(id: version_ids.uniq).sorted
+      Version.where(id: version_ids.uniq, status: %i[open locked]).sorted
     end
   end
 
