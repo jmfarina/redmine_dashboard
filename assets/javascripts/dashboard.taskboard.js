@@ -94,7 +94,7 @@
 							currentIssue = issue;
 							currentIssue.css({ visibility: 'hidden', opacity: 0 });
 							$.getScript(
-                baseURL + '/move?issue=' + issueId + '&lock_version=' + lock + '&column=' + coluid + '&group=' + groupId + '&assigne=' + assignTarget + versionParam)
+                baseURL + '/move?keep_filters=true&issue=' + issueId + '&lock_version=' + lock + '&column=' + coluid + '&group=' + groupId + '&assignee=' + assignTarget + versionParam)
 							.fail(function(jqxhr, settings, exception) {
 								Rdb.rdbDADShowIssue();
 								Rdb.rdbError('<b>Error</b>: ' + exception);
