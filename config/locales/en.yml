@@ -72,3 +72,5 @@ en:
   rdb_flash_missing_lock_version: "<p><b>Missing lock version</b>: Cannot update issue without lock version. Try again."
   rdb_flash_stale_object: "<p>Attempted to update a stale issue: <b>%{issue}</b>. Check changes and try again."
   rdb_flash_invalid_request: "<p>Invalid request.</p>"
+  rdb_flash_illegal_update: "<p>You are not allowed to update the field %{field} for this issue</p>"
+  rdb_flash_user_not_in_project: "<p>The user specified is not a member of this project</p>"

@@ -71,3 +71,5 @@ es:
   rdb_flash_missing_lock_version: "<p><b>Bloqueo de la versión no encontrado</b>: No puedes actualizar la tarea sin bloquear la versión. Inténtalo de nuevo"
   rdb_flash_stale_object: "<p>Se ha intentado actualizar un tarea antigua: <b>%{issue}</b>. Comprueba los cambios e inténtalo de nuevo."
   rdb_flash_invalid_request: "<p>Solicitud no válida.</p>"
+  rdb_flash_illegal_update: "<p>No tienes permisos para actualizar el campo  %{field} para esta tarea</p>"
+  rdb_flash_user_not_in_project: "<p>El usuario especificado no es miembro de este proyecto</p>"
