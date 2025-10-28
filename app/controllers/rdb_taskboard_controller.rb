@@ -34,6 +34,8 @@ class RdbTaskboardController < RdbDashboardController
 
     @issue.done_ratio = params[:done_ratio].to_i if params[:done_ratio]
 
+    read_only_attributes = @issue.read_only_attribute_names(User.current)
+
     if params[:unassigne_me] && @issue.assigned_to_id == User.current.id
       @issue.assigned_to_id = nil
     elsif params[:assignee] && !params[:assignee].empty?
@@ -52,7 +54,13 @@ class RdbTaskboardController < RdbDashboardController
         return flash_error :rdb_flash_invalid_request
       end
 
-      @issue.assigned_to_id = new_user.nil? ? nil : new_user.id # TODO validate that user can change assignation
+      if read_only_attributes.include?('assigned_to_id') && new_user != @issue.assigned_to
+        return flash_error :rdb_flash_illegal_update, field: I18n.t(:field_assigned_to)
+      elsif !new_user.nil? && new_user.membership(@issue.project).nil?
+        return flash_error :rdb_flash_user_not_in_project
+      else
+        @issue.assigned_to_id = new_user.nil? ? nil : new_user.id
+      end
     elsif params[:assigne_me] || @board.options[:change_assignee]
       @issue.assigned_to_id = User.current.id
     end
@@ -68,13 +76,17 @@ class RdbTaskboardController < RdbDashboardController
     end
 
     if params[:version]
+      if read_only_attributes.include?('fixed_version_id')
+        return flash_error :rdb_flash_illegal_update, field: I18n.t(:field_fixed_version)
+      end
+
       begin
         version = params[:version].empty? ? nil : (Version.find params[:version].to_i)
       rescue ActiveRecord::RecordNotFound
         return flash_error :rdb_flash_invalid_request
       end
 
-      if @issue.assignable_versions.include?(version) || version.nil? # TODO validate that user can change version?
+      if @issue.assignable_versions.include?(version) || version.nil?
         @issue.fixed_version = version
       end
     end
